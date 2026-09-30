@@ -4,3 +4,5 @@ v1.0.2:
     - 'Changes in events'
 v1.0.3:
     - 'A directive value can no longer add a directive or break the header, the settings are validated on every save and applied as soon as they are saved'
+v1.0.4:
+    - 'Composer installs the Fortify core with the module; releases are published on GitHub'
