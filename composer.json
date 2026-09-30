@@ -10,7 +10,10 @@
         "security",
         "csp",
         "content-security-policy",
-        "fortify"
+        "fortify",
+        "laravel",
+        "xss",
+        "security-headers"
     ],
     "authors": [
         {
@@ -18,10 +21,11 @@
             "homepage": "https://github.com/wobqqq"
         }
     ],
-    "homepage": "https://github.com/wobqqq/oc-fortify-csp-plugin",
+    "homepage": "https://octobercms.com/plugin/wobqqq-fortifycsp",
     "support": {
         "issues": "https://github.com/wobqqq/oc-fortify-csp-plugin/issues",
         "source": "https://github.com/wobqqq/oc-fortify-csp-plugin",
+        "docs": "https://github.com/wobqqq/oc-fortify-csp-plugin#readme",
         "security": "https://github.com/wobqqq/oc-fortify-csp-plugin/security/policy"
     },
     "require": {

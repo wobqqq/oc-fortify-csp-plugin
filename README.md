@@ -1,10 +1,12 @@
 # CSP
 
 [![CI](https://github.com/wobqqq/oc-fortify-csp-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/wobqqq/oc-fortify-csp-plugin/actions/workflows/ci.yml)
-[![October CMS](https://img.shields.io/badge/October%20CMS-3.x%20%7C%204.x-e24848)](https://octobercms.com/plugin/wobqqq-fortifycsp)
-[![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)](composer.json)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)](phpstan.neon.dist)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![Packagist](https://img.shields.io/packagist/v/wobqqq/fortifycsp-plugin)](https://packagist.org/packages/wobqqq/fortifycsp-plugin)
+[![Downloads](https://img.shields.io/packagist/dt/wobqqq/fortifycsp-plugin)](https://packagist.org/packages/wobqqq/fortifycsp-plugin)
+[![Marketplace](https://img.shields.io/badge/October%20CMS-Marketplace-e24848)](https://octobercms.com/plugin/wobqqq-fortifycsp)
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)](https://github.com/wobqqq/oc-fortify-csp-plugin/blob/main/composer.json)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)](https://github.com/wobqqq/oc-fortify-csp-plugin/blob/main/phpstan.neon.dist)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/wobqqq/oc-fortify-csp-plugin/blob/main/LICENSE.md)
 
 **CSP** adds Content Security Policy (CSP) headers to your application to prevent XSS and data injection attacks.
 
@@ -41,6 +43,16 @@ This widget acts as a central hub, allowing you to monitor and manage your appli
 - October CMS 3.x or 4.x
 - [Fortify](https://octobercms.com/plugin/wobqqq-fortify)
 
+## 📥 Installation
+
+| From | How |
+|---|---|
+| **October CMS Marketplace** | [octobercms.com/plugin/wobqqq-fortifycsp](https://octobercms.com/plugin/wobqqq-fortifycsp), or **Settings → Updates & Plugins → Install plugins** in the backend and search for “Fortify CSP” |
+| **Artisan** | `php artisan plugin:install Wobqqq.FortifyCsp` |
+| **Composer** | `composer require wobqqq/fortifycsp-plugin` then `php artisan october:migrate` |
+
+It needs the [Fortify](https://octobercms.com/plugin/wobqqq-fortify) core plugin: Composer installs it with the module, from the marketplace install **Fortify** first.
+
 ## 💻 Usage
 
 All configuration and management is handled via the October CMS admin panel.
@@ -66,7 +78,7 @@ php artisan wobqqq.fortify:csp:disable
 
 ## 🔒 Security
 
-Please report a vulnerability privately, as described in [SECURITY.md](SECURITY.md).
+Please report a vulnerability privately, as described in [SECURITY.md](https://github.com/wobqqq/oc-fortify-csp-plugin/blob/main/SECURITY.md).
 
 ## 🛠️ Development
 
