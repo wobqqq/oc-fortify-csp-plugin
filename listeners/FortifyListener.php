@@ -26,40 +26,38 @@ final readonly class FortifyListener
 
     /**
      * @param Dispatcher $event
-     * @return void
      */
     public function subscribe($event): void
     {
-        $event->listen(FortifyEvent::SERVICES_WIDGET_GROUP_ITEM_CSP->value, function (WidgetGroupItemDto &$widgetGroupItemDto) {
+        $event->listen(FortifyEvent::SERVICES_WIDGET_GROUP_ITEM_CSP->value, function (WidgetGroupItemDto &$widgetGroupItemDto): void {
             $this->serveWidgetGroupItem($widgetGroupItemDto);
         });
 
-        $event->listen(FortifyEvent::MODEL_FORTIFY_INIT_SETTINGS_DATA->value, function (Fortify &$fortify) {
+        $event->listen(FortifyEvent::MODEL_FORTIFY_INIT_SETTINGS_DATA->value, function (Fortify &$fortify): void {
             $this->serveModelInitSettingsData($fortify);
         });
 
-        Fortify::extend(function (Fortify $fortify) {
+        Fortify::extend(function (Fortify $fortify): void {
             $this->serveModel($fortify);
-
-            $fortify->bindEvent('model.afterSave', function () {
-                $this->cspDtoCache->clear();
-            });
-
-            $fortify->bindEvent('model.afterDelete', function () {
-                $this->cspDtoCache->clear();
-            });
         });
 
-        $event->listen('backend.form.extendFields', function (Form $form) {
+        // Model events, not bindEvent(): the settings instance may predate this listener.
+        $event->listen(
+            ['eloquent.saved: ' . Fortify::class, 'eloquent.deleted: ' . Fortify::class],
+            function (): void {
+                $this->cspDtoCache->clear();
+            },
+        );
+
+        $event->listen('backend.form.extendFields', function (Form $form): void {
             if (!$form->getController() instanceof Settings || !$form->model instanceof Fortify || $form->isNested) {
                 return;
             }
 
-            /** @var Fortify $fortify */
             $fortify = $form->model;
 
+            $this->serveModel($fortify);
             $this->serveModelInitSettingsData($fortify);
-
             $this->serveFields($form);
         });
     }
@@ -72,7 +70,7 @@ final readonly class FortifyListener
             'icon-wrench',
         );
         $cspDto = CspDtoInstance::instance()->get();
-        $color = $cspDto->cmsEnabled === true && !empty($cspDto->cmsHeaderValue)
+        $color = $cspDto->cmsEnabled && $cspDto->cmsHeaderValue !== null
             ? WidgetItemColor::SUCCESS
             : WidgetItemColor::DANGER;
         $widgetGroupItemDto = FortifyTransformer::widgetGroupItemDto(
@@ -85,9 +83,9 @@ final readonly class FortifyListener
 
     private function serveModelInitSettingsData(Fortify $fortify): void
     {
-        $csp = (isset($fortify->csp) && is_array($fortify->csp)) ? $fortify->csp : [];
+        $csp = is_array($fortify->csp) ? $fortify->csp : [];
 
-        if (!empty($csp)) {
+        if ($csp !== []) {
             return;
         }
 
@@ -105,8 +103,6 @@ final readonly class FortifyListener
         $csp['cms_form_action'] = [['v' => "'self'"]];
         $csp['cms_frame_ancestors'] = [['v' => "'none'"]];
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        /** @phpstan-ignore-next-line */
         $fortify->csp = $csp;
     }
 
@@ -115,7 +111,7 @@ final readonly class FortifyListener
         foreach (CspService::DIRECTIVES as $cspDirectiveKey => $cspDirective) {
             $fortify->attributeNames[sprintf('csp.%s.*.v', $cspDirectiveKey)] = 'wobqqq.fortify::lang.fields.value';
 
-            $fortify->rules[sprintf('csp.%s.*.v', $cspDirectiveKey)] = 'nullable|string|max:100';
+            $fortify->rules[sprintf('csp.%s.*.v', $cspDirectiveKey)] = ['nullable', 'string', 'max:100', 'regex:' . CspService::SOURCE_PATTERN];
             $fortify->rules[sprintf('csp.%s', $cspDirectiveKey)] = 'nullable|array|max:150';
         }
     }

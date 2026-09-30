@@ -2,3 +2,5 @@ v1.0.1:
     - 'First version'
 v1.0.2:
     - 'Changes in events'
+v1.0.3:
+    - 'A directive value can no longer add a directive or break the header, the settings are validated on every save and applied as soon as they are saved'

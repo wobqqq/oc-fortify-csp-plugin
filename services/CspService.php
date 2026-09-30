@@ -6,6 +6,7 @@ namespace Wobqqq\FortifyCsp\Services;
 
 use App;
 use Config;
+use Illuminate\Support\Collection;
 use October\Rain\Router\CoreRouter;
 use Wobqqq\Fortify\Models\Fortify;
 use Wobqqq\FortifyCsp\Http\Middlewares\CspMiddleware;
@@ -27,6 +28,12 @@ final class CspService
         'cms_form_action' => 'form-action',
         'cms_frame_ancestors' => 'frame-ancestors',
     ];
+
+    /**
+     * A source expression: no separator (";", ","), whitespace or control character that
+     * would add a directive or break the header.
+     */
+    public const SOURCE_PATTERN = "/^[A-Za-z0-9\\-._~:\\/?#\\[\\]@!$&'()*+=%]{1,100}$/";
 
     private static bool $addMiddleware = false;
 
@@ -51,16 +58,20 @@ final class CspService
         $this->overrideConfig();
     }
 
+    public static function isValidSource(string $value): bool
+    {
+        return preg_match(self::SOURCE_PATTERN, $value) === 1;
+    }
+
     public function disable(): void
     {
-        /** @var array<string, mixed>|\Illuminate\Support\Collection<int, mixed> $csp */
         $csp = Fortify::get('csp');
 
-        if ($csp instanceof \Illuminate\Support\Collection) {
+        if ($csp instanceof Collection) {
             $csp = $csp->toArray();
         }
 
-        $csp = !is_array($csp) ? [] : $csp;
+        $csp = is_array($csp) ? $csp : [];
 
         $csp['cms_enabled'] = false;
 
@@ -69,22 +80,12 @@ final class CspService
 
     private function overrideConfig(): void
     {
-        /** @var string|null|array<int, string> $middleware */
         $middleware = Config::get('cms.middleware_group', []);
-
-        if (is_string($middleware)) {
-            $middleware = [$middleware];
-        }
-
-        if (empty($middleware)) {
-            $middleware = [];
-        }
+        $middleware = is_string($middleware) ? [$middleware] : (is_array($middleware) ? $middleware : []);
+        $middleware = array_filter($middleware, static fn (mixed $name): bool => is_string($name) && $name !== '');
 
         $middleware[] = CspMiddleware::ALIAS;
-        /** @var array<int, string> $middleware */
-        $middleware = array_unique($middleware);
-        $middleware = array_filter($middleware);
 
-        Config::set('cms.middleware_group', $middleware);
+        Config::set('cms.middleware_group', array_values(array_unique($middleware)));
     }
 }

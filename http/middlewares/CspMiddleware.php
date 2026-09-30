@@ -14,18 +14,15 @@ final class CspMiddleware
     public const ALIAS = 'fortify_cms_csp';
 
     /**
-     * @param Request $request
-     * @param Closure $next
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|mixed
+     * @param Closure(Request): mixed $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        /** @var Response $response */
         $response = $next($request);
 
         $cspDto = CspDtoInstance::instance()->get();
 
-        if (!$cspDto->cmsEnabled || empty($cspDto->cmsHeaderValue)) {
+        if (!$response instanceof Response || !$cspDto->cmsEnabled || $cspDto->cmsHeaderValue === null) {
             return $response;
         }
 
