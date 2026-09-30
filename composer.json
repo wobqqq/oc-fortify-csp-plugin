@@ -1,7 +1,7 @@
 {
     "name": "wobqqq/fortifycsp-plugin",
     "description": "Fortify module for October CMS: sends a Content Security Policy header",
-    "license": "proprietary",
+    "license": "MIT",
     "type": "october-plugin",
     "keywords": [
         "october",

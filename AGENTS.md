@@ -4,7 +4,7 @@ Guidance for AI coding agents (Claude Code, Codex, Junie, Cursor) working in thi
 
 ## What this is
 
-**Fortify CSP** (`Wobqqq.FortifyCsp`) is a paid module of the Fortify security suite for October CMS 3.x/4.x (built and tested against 4.4 on Laravel 12, PHP 8.2+). It sends a `Content-Security-Policy` header, built from twelve directives the administrator edits on the settings page, with every response of the site's front end (`cms.middleware_group`); the backend is left alone.
+**Fortify CSP** (`Wobqqq.FortifyCsp`) is a free module of the Fortify security suite for October CMS 3.x/4.x (built and tested against 4.4 on Laravel 12, PHP 8.2+). It sends a `Content-Security-Policy` header, built from twelve directives the administrator edits on the settings page, with every response of the site's front end (`cms.middleware_group`); the backend is left alone.
 
 It requires the core plugin [`Wobqqq.Fortify`](https://github.com/wobqqq/oc-fortify-plugin): the settings live in the core's `Wobqqq\Fortify\Models\Fortify` record under the `csp` key and appear on **Settings → Fortify**, and the module draws its own item on the core's dashboard widget.
 
