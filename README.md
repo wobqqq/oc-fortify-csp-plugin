@@ -69,6 +69,7 @@ php artisan wobqqq.fortify:csp:disable
 
 ## ⬆️ Upgrading
 
+- **1.0.5** — internal refactoring. Nothing changes on an existing site.
 - **1.0.4** — installing the module with Composer installs the Fortify core with it. Nothing changes on an existing site.
 - **1.0.3** — a directive value must be a single source expression (such as `'self'`, `https://cdn.example.com` or `data:`); a stored value containing `;`, `,`, spaces or control characters is no longer sent, since it could add directives or break the header. The directives are separated by `; `. Saved settings take effect at once.
 
